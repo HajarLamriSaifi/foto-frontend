@@ -30,6 +30,7 @@ export class BookingFormComponent {
   constructor(private http: HttpClient, private bookingService: BookingService) {}
 
   onSubmit() {
+    this.isSubmitted = true;  // Zet isSubmitted op true wanneer het formulier wordt verzonden.
     this.errorMessage = null;
 
     if (!this.isValidForm()) {

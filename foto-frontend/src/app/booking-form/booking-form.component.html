@@ -1,55 +1,76 @@
-<div class="booking-form">
-    <h2>Boek een Fotoshoot</h2>
+<div class="container">
+  <div class="welcome-text">
+      <h1>Welcome</h1>
+      <h2>to Studio.Saifi</h2>
+  </div>
 
-    <!-- Toon het succesbericht als het formulier is verzonden -->
-    <div *ngIf="isSubmitted" class="success-message">
-      <p>Je aanvraag is succesvol verzonden!</p>
-    </div>
+  <div class="booking-form">
+      <h2>Booking</h2>
 
-    <!-- Toon foutmeldingen -->
-    <div *ngIf="errorMessage" class="error-message">
-      <p>{{ errorMessage }}</p>
-    </div>
+      <div *ngIf="errorMessage" class="error-message">
+          <p>{{ errorMessage }}</p>
+      </div>
 
-    <!-- Verberg het formulier als de aanvraag succesvol is -->
-    <form *ngIf="!isSubmitted" (ngSubmit)="onSubmit()">
-      <label for="name">Naam:</label>
-      <input type="text" id="name" [(ngModel)]="booking.name" name="name" required />
-      <div *ngIf="!booking.name && errorMessage" class="error">Naam is verplicht!</div>
+      <form *ngIf="!isSubmitted" (ngSubmit)="onSubmit()" #form="ngForm">
+          <div class="form-group-container">
+              <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.name}">
+                  <label for="name">Naam:</label>
+                  <input type="text" id="name" [(ngModel)]="booking.name" name="name" required />
+                  <div *ngIf="isSubmitted && !booking.name" class="error-message">Dit veld is verplicht</div>
+              </div>
+              <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.surname}">
+                  <label for="surname">Achternaam:</label>
+                  <input type="text" id="surname" [(ngModel)]="booking.surname" name="surname" required />
+                  <div *ngIf="isSubmitted && !booking.surname" class="error-message">Dit veld is verplicht</div>
+              </div>
+          </div>
 
-      <label for="surname">Achternaam:</label>
-      <input type="text" id="surname" [(ngModel)]="booking.surname" name="surname" required />
-      <div *ngIf="!booking.surname && errorMessage" class="error">Achternaam is verplicht!</div>
+          <div class="form-group-container">
+              <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.eventType}">
+                  <label for="eventType">Type Evenement:</label>
+                  <input type="text" id="eventType" [(ngModel)]="booking.eventType" name="eventType" required />
+                  <div *ngIf="isSubmitted && !booking.eventType" class="error-message">Dit veld is verplicht</div>
+              </div>
+              <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.mediaType}">
+                  <label for="mediaType">Foto of Video:</label>
+                  <select id="mediaType" [(ngModel)]="booking.mediaType" name="mediaType" required>
+                      <option value="photo">Foto</option>
+                      <option value="video">Video</option>
+                      <option value="both">Beide</option>
+                  </select>
+                  <div *ngIf="isSubmitted && !booking.mediaType" class="error-message">Dit veld is verplicht</div>
+              </div>
+          </div>
 
-      <label for="eventType">Type Evenement:</label>
-      <input type="text" id="eventType" [(ngModel)]="booking.eventType" name="eventType" required />
-      <div *ngIf="!booking.eventType && errorMessage" class="error">Type evenement is verplicht!</div>
+          <div class="form-group-container">
+              <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.date}">
+                  <label for="date">Datum:</label>
+                  <input type="date" id="date" [(ngModel)]="booking.date" name="date" required />
+                  <div *ngIf="isSubmitted && !booking.date" class="error-message">Dit veld is verplicht</div>
+              </div>
+              <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.location}">
+                  <label for="location">Locatie:</label>
+                  <input type="text" id="location" [(ngModel)]="booking.location" name="location" required />
+                  <div *ngIf="isSubmitted && !booking.location" class="error-message">Dit veld is verplicht</div>
+              </div>
+          </div>
 
-      <label for="mediaType">Foto of Video:</label>
-      <select id="mediaType" [(ngModel)]="booking.mediaType" name="mediaType" required>
-        <option value="photo">Foto</option>
-        <option value="video">Video</option>
-        <option value="both">Beide</option>
-      </select>
-      <div *ngIf="!booking.mediaType && errorMessage" class="error">Media Type is verplicht!</div>
+          <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.message}">
+              <label for="message">Bericht:</label>
+              <textarea id="message" [(ngModel)]="booking.message" name="message"></textarea>
+          </div>
 
-      <label for="date">Datum:</label>
-      <input type="date" id="date" [(ngModel)]="booking.date" name="date" required />
-      <div *ngIf="!booking.date && errorMessage" class="error">Datum is verplicht!</div>
-      <div *ngIf="booking.date && isDateInPast(booking.date) && errorMessage" class="error">De datum moet in de toekomst liggen!</div>
+          <div class="form-group" [ngClass]="{'invalid': isSubmitted && !booking.email}">
+              <label for="email">E-mail:</label>
+              <input type="email" id="email" [(ngModel)]="booking.email" name="email" required />
+              <div *ngIf="isSubmitted && !booking.email" class="error-message">Dit veld is verplicht</div>
+          </div>
 
-      <label for="location">Locatie:</label>
-      <input type="text" id="location" [(ngModel)]="booking.location" name="location" required />
-      <div *ngIf="!booking.location && errorMessage" class="error">Locatie is verplicht!</div>
+          <button type="submit" [disabled]="!form.valid">Verzenden</button>
+      </form>
 
-      <label for="message">Bericht:</label>
-      <textarea id="message" [(ngModel)]="booking.message" name="message"></textarea>
-
-      <label for="email">E-mail:</label>
-      <input type="email" id="email" [(ngModel)]="booking.email" name="email" required />
-      <div *ngIf="!booking.email && errorMessage" class="error">E-mail is verplicht!</div>
-      <div *ngIf="booking.email && !validateEmail(booking.email) && errorMessage" class="error">Voer een geldig e-mailadres in!</div>
-
-      <button type="submit">Verzenden</button>
-    </form>
+      <div *ngIf="isSubmitted" class="success-message">
+          <p>Je aanvraag is succesvol verzonden!</p>
+      </div>
+  </div>
 </div>
